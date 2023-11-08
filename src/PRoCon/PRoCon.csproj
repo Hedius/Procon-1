@@ -772,7 +772,7 @@ cp -a "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationNa
 cp -a "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs"
 cp -a "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization"
 cp -a "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins"
-cp -a "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)"
+      cp -a "$(SolutionDir)Resources\GeoIP\GeoLite2-Country.mmdb" "$(SolutionDir)..\builds\$(ConfigurationName)"
 mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
 cp -a "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
 cp -a "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
@@ -783,7 +783,7 @@ xcopy "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationNa
 xcopy "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs" /Y /E /I
 xcopy "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization" /Y /E /I
 xcopy "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins" /Y /E /I
-xcopy "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
+      xcopy "$(SolutionDir)Resources\GeoIP\GeoLite2-Country.mmdb" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
 mkdir "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
 xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
 xcopy "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
@@ -794,7 +794,7 @@ xcopy "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(Configurati
       xcopy "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs" /Y /E /I
       xcopy "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization" /Y /E /I
       xcopy "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins" /Y /E /I
-      xcopy "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
+      xcopy "$(SolutionDir)Resources\GeoIP\GeoLite2-Country.mmdb" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
       mkdir "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
       xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
       xcopy "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
