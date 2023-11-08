@@ -17,79 +17,60 @@
 // You should have received a copy of the GNU General Public License
 // along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
 
-using PRoCon.Core.ProxyChecker;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace PRoCon.Core.Players
-{
-    public class PlayerDictionary : KeyedCollection<string, CPlayerInfo>
-    {
-
+namespace PRoCon.Core.Players {
+    public class PlayerDictionary : KeyedCollection<string, CPlayerInfo> {
         public delegate void PlayerAlteredHandler(CPlayerInfo item);
-        public event PlayerAlteredHandler PlayerAdded;
-        public event PlayerAlteredHandler PlayerUpdated;
-        public event PlayerAlteredHandler PlayerRemoved;
 
-        public PlayerDictionary()
-        {
-
+        public PlayerDictionary() {
         }
 
-        public PlayerDictionary(IEnumerable<CPlayerInfo> playerList)
-        {
-            foreach (CPlayerInfo cpi in playerList)
-            {
+        public PlayerDictionary(IEnumerable<CPlayerInfo> playerList) {
+            foreach (CPlayerInfo cpi in playerList) {
                 this.Add(cpi);
             }
         }
 
-        protected override string GetKeyForItem(CPlayerInfo item)
-        {
+        public event PlayerAlteredHandler PlayerAdded;
+        public event PlayerAlteredHandler PlayerUpdated;
+        public event PlayerAlteredHandler PlayerRemoved;
+
+        protected override string GetKeyForItem(CPlayerInfo item) {
             return item.SoldierName;
         }
 
-        protected override void InsertItem(int index, CPlayerInfo item)
-        {
-            if (this.PlayerAdded != null)
-            {
+        protected override void InsertItem(int index, CPlayerInfo item) {
+            if (this.PlayerAdded != null) {
                 this.PlayerAdded(item);
             }
 
             base.InsertItem(index, item);
         }
 
-        protected override void RemoveItem(int index)
-        {
-
-            if (this.PlayerUpdated != null)
-            {
+        protected override void RemoveItem(int index) {
+            if (this.PlayerUpdated != null) {
                 this.PlayerUpdated(this[index]);
             }
 
             base.RemoveItem(index);
         }
 
-        protected override void SetItem(int index, CPlayerInfo item)
-        {
-            if (this.PlayerRemoved != null)
-            {
+        protected override void SetItem(int index, CPlayerInfo item) {
+            if (this.PlayerRemoved != null) {
                 this.PlayerRemoved(item);
             }
 
             base.SetItem(index, item);
         }
 
-        public string ToJsonString()
-        {
-
+        public string ToJsonString() {
             Hashtable players = new Hashtable();
 
             ArrayList playersList = new ArrayList();
-            foreach (CPlayerInfo playerInfo in this)
-            {
-
+            foreach (CPlayerInfo playerInfo in this) {
                 Hashtable player = new Hashtable();
 
                 player.Add("clan_tag", playerInfo.ClanTag);
@@ -113,5 +94,4 @@ namespace PRoCon.Core.Players
             return JSON.JsonEncode(players);
         }
     }
-
 }

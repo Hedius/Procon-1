@@ -1,7 +1,7 @@
 ﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
 
     http://www.phogue.net
- 
+
     This file is part of PRoCon Frostbite.
 
     PRoCon Frostbite is free software: you can redistribute it and/or modify
@@ -20,43 +20,34 @@
 
 
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net.Sockets;
 using System.Threading;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
 
-namespace PRoCon.Console
-{
-    using Core;
-    using Core.Remote;
-    using System.Net.Sockets;
-    
-    class Program
-    {
-        
-            
-        static void Main(string[] args)
-        {
+namespace PRoCon.Console {
+    class Program {
+        static void Main(string[] args) {
             int connectionIntrupts = 0;
 
             int maxConnectionIntruppts = 5;
 
             int iValue;
-            
-            if (args != null && args.Length >= 2)
-            {
-                for (int i = 0; i < args.Length; i = i + 2)
-                {
-                    if (String.Compare("-use_core", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue > 0)
-                    {
-                        System.Diagnostics.Process.GetCurrentProcess().ProcessorAffinity = (System.IntPtr)iValue;
+
+            if (args != null && args.Length >= 2) {
+                for (int i = 0; i < args.Length; i = i + 2) {
+                    if (String.Compare("-use_core", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue > 0) {
+                        Process.GetCurrentProcess().ProcessorAffinity = (IntPtr)iValue;
                     }
                 }
             }
 
             PRoConApplication application = null;
 
-            if (PRoConApplication.IsProcessOpen() == false)
-            {
-                try
-                {
+            if (PRoConApplication.IsProcessOpen() == false) {
+                try {
                     application = new PRoConApplication(true, args);
 
                     System.Console.WriteLine("Procon Frostbite");
@@ -72,45 +63,37 @@ namespace PRoCon.Console
                     application.Execute();
 
                     GC.Collect();
-                    
+
                     // Check if we are running in a docker container
-                    if (System.IO.File.Exists("/proc/1/cgroup") == true)
-                    {
-                        string strCGroup = System.IO.File.ReadAllText("/proc/1/cgroup");
-                        if (strCGroup.Contains("/docker/") == true)
-                        {
+                    if (File.Exists("/proc/1/cgroup") == true) {
+                        string strCGroup = File.ReadAllText("/proc/1/cgroup");
+                        if (strCGroup.Contains("/docker/") == true) {
                             System.Console.WriteLine("[PRoCon] Running in a Docker container.");
                         }
                     }
 
                     // Check if the environemnt variable "PROCON_GAMESERVER_IP" exists
-                    string PROCON_GAMESERVER_IP = System.Environment.GetEnvironmentVariable("PROCON_GAMESERVER_IP") ?? "";
-                    
-                    if (PROCON_GAMESERVER_IP != "")
-                    {
-                        // Run a background thread to keep checking if the connection is still alive, otherwise close application.
-                        Thread t = new Thread(new ThreadStart(delegate
-                        {
-                            Int32.TryParse(System.Environment.GetEnvironmentVariable("PROCON_GAMESERVER_PORT"), out int PROCON_GAMESERVER_PORT);
+                    string PROCON_GAMESERVER_IP = Environment.GetEnvironmentVariable("PROCON_GAMESERVER_IP") ?? "";
 
-                            while (true)
-                            {
+                    if (PROCON_GAMESERVER_IP != "") {
+                        // Run a background thread to keep checking if the connection is still alive, otherwise close application.
+                        Thread t = new Thread(new ThreadStart(delegate {
+                            Int32.TryParse(Environment.GetEnvironmentVariable("PROCON_GAMESERVER_PORT"), out int PROCON_GAMESERVER_PORT);
+
+                            while (true) {
                                 string currentTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                
-                                System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] Testing connection to games server...");
+
+                                System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] Testing connection to game server...");
                                 Thread.Sleep(5000);
 
                                 // Check if port is alive using the ip PROCON_GAMESERVER_IP and port PROCON_GAMESERVER_PORT
-                                using (TcpClient tcpClient = new TcpClient())
-                                {
-                                    try
-                                    {
+                                using (TcpClient tcpClient = new TcpClient()) {
+                                    try {
                                         // Reset the connectionIntrupts upponse successful connect.
-                                        if(connectionIntrupts > 0)
-                                        {
+                                        if (connectionIntrupts > 0) {
                                             connectionIntrupts = 0;
                                         }
-                                        
+
                                         tcpClient.Connect(PROCON_GAMESERVER_IP, PROCON_GAMESERVER_PORT);
 
                                         // If we get here, the connection is alive.
@@ -118,49 +101,40 @@ namespace PRoCon.Console
                                         tcpClient.Close();
 
                                         System.Console.WriteLine("[" + currentTimestamp + "] Game server connection successful.");
-
                                     }
-                                    catch (Exception)
-                                    {
+                                    catch (Exception) {
                                         // Once we reach the max amount of connection attempts, kill the application.
-                                        if (connectionIntrupts > maxConnectionIntruppts)
-                                        {
+                                        if (connectionIntrupts > maxConnectionIntruppts) {
                                             System.Console.WriteLine("[" + currentTimestamp + "] Connection to game server lost, closing application.");
                                             application.Shutdown();
                                             // Exit the application
                                             Environment.Exit(1);
                                             break;
                                         }
-                                        else
-                                        {
+                                        else {
                                             connectionIntrupts++;
                                         }
                                     }
                                 }
                             }
                         }));
-                        
+
                         t.Start();
                     }
 
                     System.Console.WriteLine("Running... (Press any key to shutdown)");
                     System.Console.ReadKey();
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     FrostbiteConnection.LogError("PRoCon.Console.exe", "", e);
                 }
-                finally
-                {
-                    if (application != null)
-                    {
+                finally {
+                    if (application != null) {
                         application.Shutdown();
                     }
                 }
-
             }
-            else
-            {
+            else {
                 // Possible prevention of a cpu consumption bug I can see at the time of writing.
                 // TCAdmin: Start procon.exe
                 // procon.exe has an update to install
@@ -171,7 +145,6 @@ namespace PRoCon.Console
                 System.Console.WriteLine("Already running - shutting down");
                 Thread.Sleep(50);
             }
-
         }
     }
 }
