@@ -789,5 +789,37 @@ xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(Configuration
 xcopy "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
 xcopy "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
 </PostBuildEvent>
+    <PostBuildEvent>mkdir "$(SolutionDir)..\builds\$(ConfigurationName)"
+      xcopy "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationName)\Media" /Y /E /I
+      xcopy "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs" /Y /E /I
+      xcopy "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization" /Y /E /I
+      xcopy "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins" /Y /E /I
+      xcopy "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
+      mkdir "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+      xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+      xcopy "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+      xcopy "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\da"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\cs"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\de"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\es"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\fa"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\fi"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\fr"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\it"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\ko"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\mk"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\nl"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\pl"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\pt"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\ru"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\sv"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\tr"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\zh-CN"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\zh-Hans"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\zh-Hant"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\pt-BR"
+      RD /S /Q "$(SolutionDir)..\builds\$(ConfigurationName)\ja"
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
