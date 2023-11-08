@@ -83,7 +83,7 @@ namespace PRoCon.Console {
                             while (true) {
                                 string currentTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                                System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] Testing connection to game server...");
+                                System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] [Watchdog] Testing connection to game server...");
                                 Thread.Sleep(5000);
 
                                 // Check if port is alive using the ip PROCON_GAMESERVER_IP and port PROCON_GAMESERVER_PORT
@@ -100,12 +100,12 @@ namespace PRoCon.Console {
                                         // Now lets clean up the tcpClient by closing the connection
                                         tcpClient.Close();
 
-                                        System.Console.WriteLine("[" + currentTimestamp + "] Game server connection successful.");
+                                        System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] [Watchdog] Game server connection successful.");
                                     }
                                     catch (Exception) {
                                         // Once we reach the max amount of connection attempts, kill the application.
                                         if (connectionIntrupts > maxConnectionIntruppts) {
-                                            System.Console.WriteLine("[" + currentTimestamp + "] Connection to game server lost, closing application.");
+                                            System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] [Watchdog] Connection to game server lost, closing application.");
                                             application.Shutdown();
                                             // Exit the application
                                             Environment.Exit(1);
