@@ -101,6 +101,9 @@ namespace PRoCon.Console {
                                         tcpClient.Close();
 
                                         System.Console.WriteLine("[" + currentTimestamp + "] [PRoCon] [Watchdog] Game server connection successful.");
+
+                                        // Close the thread as we have a successful connection.
+                                        break;
                                     }
                                     catch (Exception) {
                                         // Once we reach the max amount of connection attempts, kill the application.
