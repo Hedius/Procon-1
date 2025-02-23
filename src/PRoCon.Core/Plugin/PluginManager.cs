@@ -557,6 +557,7 @@ namespace PRoCon.Core.Plugin
 
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.dll"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySql.Data.dll"), Path.Combine(PluginBaseDirectory, "MySql.Data.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySqlConnector.dll"), Path.Combine(PluginBaseDirectory, "MySqlConnector.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.pdb"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.pdb"), true);
 
                 // Clean up temp directory
@@ -643,6 +644,7 @@ namespace PRoCon.Core.Plugin
                 MetadataReference.CreateFromFile(string.Format(dotnetRuntimePath, "System.Xml")),
 
                 MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "MySql.Data")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "MySqlConnector")),
                 MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "PRoCon.Core"))
             };
         }
@@ -946,7 +948,7 @@ namespace PRoCon.Core.Plugin
                 var hostEvidence = new Evidence();
                 hostEvidence.AddHost(new Zone(SecurityZone.MyComputer));
 
-                AppDomainSandbox = AppDomain.CreateDomain(ProconClient.HostName + ProconClient.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions, PluginManager.GetStrongName(AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "MySql.Data")));
+                AppDomainSandbox = AppDomain.CreateDomain(ProconClient.HostName + ProconClient.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions, PluginManager.GetStrongName(AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "MySql.Data" || assembly.GetName().Name == "MySqlConnector")));
 
                 WritePluginConsole("Configuring sandbox..");
                 // create the factory class in the secondary app-domain
