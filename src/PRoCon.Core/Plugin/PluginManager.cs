@@ -557,6 +557,15 @@ namespace PRoCon.Core.Plugin
 
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.dll"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySql.Data.dll"), Path.Combine(PluginBaseDirectory, "MySql.Data.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Microsoft.Bcl.AsyncInterfaces.dll"), Path.Combine(PluginBaseDirectory, "Microsoft.Bcl.AsyncInterfaces.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "System.Buffers.dll"), Path.Combine(PluginBaseDirectory, "System.Buffers.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "System.Memory.dll"), Path.Combine(PluginBaseDirectory, "System.Memory.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "System.Numerics.Vectors.dll"), Path.Combine(PluginBaseDirectory, "System.Numerics.Vectors.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "System.Runtime.CompilerServices.Unsafe.dll"), Path.Combine(PluginBaseDirectory, "System.Runtime.CompilerServices.Unsafe.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Microsoft.Extensions.Logging.Abstractions.dll"), Path.Combine(PluginBaseDirectory, "Microsoft.Extensions.Logging.Abstractions.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Microsoft.Extensions.DependencyInjection.Abstractions.dll"), Path.Combine(PluginBaseDirectory, "Microsoft.Extensions.DependencyInjection.Abstractions.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "System.Diagnostics.DiagnosticSource.dll"), Path.Combine(PluginBaseDirectory, "System.Diagnostics.DiagnosticSource.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "System.Threading.Tasks.Extensions.dll"), Path.Combine(PluginBaseDirectory, "System.Threading.Tasks.Extensions.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySqlConnector.dll"), Path.Combine(PluginBaseDirectory, "MySqlConnector.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.pdb"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.pdb"), true);
 
@@ -644,8 +653,23 @@ namespace PRoCon.Core.Plugin
                 MetadataReference.CreateFromFile(string.Format(dotnetRuntimePath, "System.Xml")),
 
                 MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "MySql.Data")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "PRoCon.Core")),
+
+                // MySqlConnector dependencies of dependencies
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "Microsoft.Bcl.AsyncInterfaces")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "System.Buffers")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "System.Memory")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "System.Numerics.Vectors")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "System.Runtime.CompilerServices.Unsafe")),
+
+                // MySqlConnector dependencies
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "Microsoft.Extensions.Logging.Abstractions")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "Microsoft.Extensions.DependencyInjection.Abstractions")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "System.Diagnostics.DiagnosticSource")),
+                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "System.Threading.Tasks.Extensions")),
+
+                // MySQL Connector
                 MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "MySqlConnector")),
-                MetadataReference.CreateFromFile(string.Format(proconRuntimePath, "PRoCon.Core"))
             };
         }
 
@@ -948,6 +972,7 @@ namespace PRoCon.Core.Plugin
                 var hostEvidence = new Evidence();
                 hostEvidence.AddHost(new Zone(SecurityZone.MyComputer));
 
+                // ignore... this logic for mysql connector
                 AppDomainSandbox = AppDomain.CreateDomain(ProconClient.HostName + ProconClient.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions, PluginManager.GetStrongName(AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "MySql.Data" || assembly.GetName().Name == "MySqlConnector")));
 
                 WritePluginConsole("Configuring sandbox..");
